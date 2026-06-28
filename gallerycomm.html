@@ -37,7 +37,7 @@
 
       <div class="portfolio-grid">
         <article class="portfolio-item">
-          <a href="">
+          <a href="#" class="image-link" data-full="kenyufull.png" data-alt="Commission work preview">
             <div class="portfolio-image">
               <img src="commcov.png" alt="Commission Work preview" />
               <div class="portfolio-overlay">
@@ -49,9 +49,9 @@
         </article>
 
          <article class="portfolio-item">
-          <a href="">
-            <div class="portfolio-image">
-              <img src="lupasmall.png" alt="Lupa preview" />
+          <a href="#" class="image-link" data-full="lupafull.png" data-alt="Lupa from Wuthering Waves commission">
+            <div class="portfolio-image portrait-wrapper">
+              <img src="lupasmall.png" alt="Lupa preview" class="portrait-img" />
               <div class="portfolio-overlay">
                 <h3>Commission Work</h3>
                 <p>Lupa from Wuthering Waves commission.</p>
@@ -61,9 +61,9 @@
         </article>
 
         <article class="portfolio-item">
-          <a href="">
+          <a href="#" class="image-link" data-full="narjafull.png,narjafull1.png" data-alt="Narja from CZN commission">
             <div class="portfolio-image">
-              <img src="narjasmall.png" alt="ZZZ Drawings preview" />
+              <img src="narjasmall.png" alt="Narja preview" />
               <div class="portfolio-overlay">
                 <h3>Commission Work</h3>
                 <p>Narja from CZN commission.</p>
@@ -73,9 +73,9 @@
         </article>
 
         <article class="portfolio-item">
-          <a href="">
-            <div class="portfolio-image">
-              <img src="ninesmall.png" alt="Artwork Four preview" />
+         <a href="#" class="image-link" data-full="ninefull.png" data-alt="Nine from CZN commission">
+            <div class="portfolio-image portrait-wrapper">
+              <img src="ninesmall.png" alt="Nine preview" class="portrait-img" />
               <div class="portfolio-overlay">
                 <h3>Commission Work</h3>
                 <p>Nine from CZN commission.</p>
@@ -85,7 +85,7 @@
         </article>
 
         <article class="portfolio-item">
-          <a href="">
+           <a href="#" class="image-link" data-full="skullfull.png" data-alt="Skull moon commission">
             <div class="portfolio-image">
               <img src="skullsmall.png" alt="Artwork Five preview" />
               <div class="portfolio-overlay">
@@ -97,7 +97,7 @@
         </article>
 
          <article class="portfolio-item">
-          <a href="">
+           <a href="#" class="image-link" data-full="benjifull.jpg" data-alt="Yuzariha from Hell's Paradise commission">
             <div class="portfolio-image">
               <img src="benjismall.png" alt="Artwork Six preview" />
               <div class="portfolio-overlay">
@@ -109,7 +109,7 @@
         </article>
 
         <article class="portfolio-item">
-          <a href="">
+           <a href="#" class="image-link" data-full="makafull.jpg" data-alt="Maka from Soul Eater commission">
             <div class="portfolio-image">
               <img src="makasmall.png" alt="Artwork Seven preview" />
               <div class="portfolio-overlay">
@@ -128,5 +128,96 @@
     <p>&copy; 2026 LaylaWarfighterrs. All rights reserved.</p>
   </footer>
 
+  <div id="imageModal" class="image-modal" aria-hidden="true">
+    <div class="image-modal__content">
+      <button type="button" class="image-modal__close" aria-label="Close image preview">&times;</button>
+      <button type="button" class="image-modal__prev" aria-label="Previous image">&#8249;</button>
+      <img id="imageModalImage" src="" alt="Enlarged artwork preview" />
+      <button type="button" class="image-modal__next" aria-label="Next image">&#8250;</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('imageModalImage');
+    const closeButton = document.querySelector('.image-modal__close');
+    const prevButton = document.querySelector('.image-modal__prev');
+    const nextButton = document.querySelector('.image-modal__next');
+
+    let modalImageSources = [];
+    let currentImageIndex = 0;
+
+    function updateModalImage() {
+      modalImage.src = modalImageSources[currentImageIndex] || '';
+      modalImage.alt = modalImage.alt || 'Enlarged artwork preview';
+      prevButton.style.display = modalImageSources.length > 1 ? 'block' : 'none';
+      nextButton.style.display = modalImageSources.length > 1 ? 'block' : 'none';
+    }
+
+    function openModal(sources, altText) {
+      modalImageSources = sources.map((src) => src.trim()).filter(Boolean);
+      currentImageIndex = 0;
+      modalImage.alt = altText || 'Enlarged artwork preview';
+      updateModalImage();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      modalImage.removeAttribute('src');
+      modalImageSources = [];
+      currentImageIndex = 0;
+    }
+
+    document.querySelectorAll('.image-link[data-full]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const imageSources = link.dataset.full.split(',');
+        openModal(imageSources, link.dataset.alt);
+      });
+    });
+
+    closeButton.addEventListener('click', closeModal);
+    prevButton.addEventListener('click', () => {
+      if (modalImageSources.length > 1) {
+        currentImageIndex = (currentImageIndex - 1 + modalImageSources.length) % modalImageSources.length;
+        updateModalImage();
+      }
+    });
+    nextButton.addEventListener('click', () => {
+      if (modalImageSources.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % modalImageSources.length;
+        updateModalImage();
+      }
+    });
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!modal.classList.contains('is-open')) {
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+
+      if (event.key === 'ArrowLeft') {
+        prevButton.click();
+      }
+
+      if (event.key === 'ArrowRight') {
+        nextButton.click();
+      }
+    });
+  </script>
 </body>
 </html>
