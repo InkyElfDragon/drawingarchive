@@ -20,81 +20,58 @@
 
   <header class="hero hero--centered" id="home" role="banner">
     <div class="hero-content">
-      <h1 class="hero-title">OC Gallery</h1>
-      <p class="hero-subtitle">A collection of original character artworks.</p>
+      <h1 class="hero-title">Human Pokemon</h1>
+      <p class="hero-subtitle">A collection of humanized Pokemon characters.</p>
       <div class="hero-buttons">
         <a href="index.html" class="btn btn-secondary">Back to Home</a>
         <a href="gallery.html" class="btn btn-secondary">Back to Gallery</a>
-        <a href="#gallery" class="btn btn-primary">Browse OC Artworks</a>
+        <a href="#gallery" class="btn btn-primary">Browse Human Pokemon Artworks</a>
       </div>
     </div>
   </header>
 
   <main class="container" role="main">
     <section class="portfolio" id="gallery" aria-label="Gallery showcase">
-      <h2 class="section-title">Original Character Artworks</h2>
-      <p class="section-subtitle">Explore a selection of original character designs and illustrations.</p>
+      <h2 class="section-title">Human Pokemon</h2>
+      <p class="section-subtitle">Explore a selection of humanized Pokemon characters.</p>
 
       <div class="portfolio-grid">
         <article class="portfolio-item">
-          <a href="galleryoc.html">
+          <a href="#" class="image-link" data-full="krookmfull.png" data-alt="Krookodile preview">
             <div class="portfolio-image">
-              <img src="lystrixoc.png" alt="OC Drawings preview" />
+              <img src="krookmsmall.png" alt="Commission Work preview" />
               <div class="portfolio-overlay">
-                <h3>Lystrix</h3>
-                <p>No soul too sweet, no sin too sour.</p>
+                <h3>Male Krookodile</h3>
+                <p>Drawing of a human male Krookodile.</p>
+              </div>
+            </div>
+          </a>
+        </article>
+
+         <article class="portfolio-item">
+          <a href="#" class="image-link" data-full="krookffull.png" data-alt="Female Krookodile preview">
+            <div class="portfolio-image portrait-wrapper">
+              <img src="krookfsmall.png" alt="Female Krookodile preview" class="portrait-img" />
+              <div class="portfolio-overlay">
+                <h3>Female Krookodile</h3>
+                <p>Drawing of a human female Krookodile.</p>
               </div>
             </div>
           </a>
         </article>
 
         <article class="portfolio-item">
-          <a href="image2.html">
-            <div class="portfolio-image">
-              <img src="MioOC.png" alt="Miyori preview" />
+          <a href="#" class="image-link" data-full="krookffull.png" data-alt="Female Krookodile preview">
+            <div class="portfolio-image portrait-wrapper">
+              <img src="krookfsmall.png" alt="Female Krookodile preview" class="portrait-img" />
               <div class="portfolio-overlay">
-                <h3>Miyori</h3>
-                <p>Something is amiss dear, I wouldn't mind it though~</p>
+                <h3>Female Krookodile</h3>
+                <p>Drawing of a human female Krookodile.</p>
               </div>
             </div>
           </a>
         </article>
 
-        <article class="portfolio-item">
-          <a href="galleryzzz.html">
-            <div class="portfolio-image">
-              <img src="sunOC.png" alt="ZZZ Drawings preview" />
-              <div class="portfolio-overlay">
-                <h3>[REDACTED]</h3>
-                <p>Kneel.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-
-        <article class="portfolio-item">
-          <a href="image4.html">
-            <div class="portfolio-image">
-              <img src="ceresoc.png" alt="Artwork Four preview" />
-              <div class="portfolio-overlay">
-                <h3>Ceres</h3>
-                <p>Lets get this bloody ball rolling.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-
-        <article class="portfolio-item">
-          <a href="image5.html">
-            <div class="portfolio-image">
-              <img src="luaoc.png" alt="Artwork Five preview" />
-              <div class="portfolio-overlay">
-                <h3>Lua</h3>
-                <p>Milk addict.</p>
-              </div>
-            </div>
-          </a>
-        </article>
       </div>
     </section>
   </main>
@@ -102,5 +79,97 @@
   <footer class="footer">
     <p>&copy; 2026 LaylaWarfighterrs. All rights reserved.</p>
   </footer>
+
+  <div id="imageModal" class="image-modal" aria-hidden="true">
+    <div class="image-modal__content">
+      <button type="button" class="image-modal__close" aria-label="Close image preview">&times;</button>
+      <button type="button" class="image-modal__prev" aria-label="Previous image">&#8249;</button>
+      <img id="imageModalImage" src="" alt="Enlarged artwork preview" />
+      <button type="button" class="image-modal__next" aria-label="Next image">&#8250;</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('imageModalImage');
+    const closeButton = document.querySelector('.image-modal__close');
+    const prevButton = document.querySelector('.image-modal__prev');
+    const nextButton = document.querySelector('.image-modal__next');
+
+    let modalImageSources = [];
+    let currentImageIndex = 0;
+
+    function updateModalImage() {
+      modalImage.src = modalImageSources[currentImageIndex] || '';
+      modalImage.alt = modalImage.alt || 'Enlarged artwork preview';
+      prevButton.style.display = modalImageSources.length > 1 ? 'block' : 'none';
+      nextButton.style.display = modalImageSources.length > 1 ? 'block' : 'none';
+    }
+
+    function openModal(sources, altText) {
+      modalImageSources = sources.map((src) => src.trim()).filter(Boolean);
+      currentImageIndex = 0;
+      modalImage.alt = altText || 'Enlarged artwork preview';
+      updateModalImage();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      modalImage.removeAttribute('src');
+      modalImageSources = [];
+      currentImageIndex = 0;
+    }
+
+    document.querySelectorAll('.image-link[data-full]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const imageSources = link.dataset.full.split(',');
+        openModal(imageSources, link.dataset.alt);
+      });
+    });
+
+    closeButton.addEventListener('click', closeModal);
+    prevButton.addEventListener('click', () => {
+      if (modalImageSources.length > 1) {
+        currentImageIndex = (currentImageIndex - 1 + modalImageSources.length) % modalImageSources.length;
+        updateModalImage();
+      }
+    });
+    nextButton.addEventListener('click', () => {
+      if (modalImageSources.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % modalImageSources.length;
+        updateModalImage();
+      }
+    });
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!modal.classList.contains('is-open')) {
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+
+      if (event.key === 'ArrowLeft') {
+        prevButton.click();
+      }
+
+      if (event.key === 'ArrowRight') {
+        nextButton.click();
+      }
+    });
+  </script>
 </body>
 </html>
